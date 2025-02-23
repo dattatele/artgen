@@ -1,12 +1,12 @@
 # ArtGen
 
-ArtGen is a command-line tool for generating ASCII art based on a brief description. Whether you input "rocket", "cat", or any phrase (up to 5 words), ArtGen will either display a pre-defined art template (if available) or dynamically construct an ASCII art banner.
+ArtGen is a CLI tool that generates ASCII art from images and text.
 
 ## Features
 
-- **Dynamic ASCII Generation:** Constructs an ASCII art frame based on your description.
-- **Pre-defined Templates:** Provides built-in templates for keywords like `cat`, `dog`, `tree`, and `hello`.
-- **Command-Line Interface:** Easily generate art using a simple CLI command.
+- Fetches images using DuckDuckGo
+- Converts images to ASCII art
+- Shows fallback stylized text with `pyfiglet`
 
 ## Installation
 
@@ -15,24 +15,22 @@ You can install ArtGen from [PyPI](https://pypi.org):
 ```bash
 pip install artgen
 ```
-Alternatively, if you're developing or testing locally, clone the repository and install in editable mode:
 
-git clone https://github.com/yourusername/artgen.git
-cd artgen
-pip install -e .
-
-Usage
+## Usage
 
 To generate ASCII art, use the following command:
 
-artgen generate_art "your description here"
+```bash
 
-artgen generate_word "your description here"
+artgen generate_art "Cat"
 
-artgen generate_img "your description here"
+artgen generate_word "Sunflower"
 
-For example:
+artgen generate_img "ASCII"
 
-artgen generate rocket
+```
 
-This will output a constructed ASCII art banner based on the description "rocket".
+## Contributing
+
+Contributions are welcome! Please open an issue or PR on GitHub.
+
