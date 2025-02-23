@@ -25,7 +25,11 @@ Usage
 
 To generate ASCII art, use the following command:
 
-artgen generate "your description here"
+artgen generate_art "your description here"
+
+artgen generate_word "your description here"
+
+artgen generate_img "your description here"
 
 For example:
 

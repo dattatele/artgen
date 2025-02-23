@@ -1,20 +1,24 @@
-[tool.poetry]
+[project]
 name = "artgen"
 version = "0.1.0"
-description = "A CLI tool that generates ASCII art based on a brief description."
-authors = ["Your Name <you@example.com>"]
-packages = [{ include = "artgen", from = "src" }]
-
-[tool.poetry.dependencies]
-python = "^3.9"
-pyfiglet = "^1.0.2"
-requests = "^2.32.3"
-ascii-magic = "^2.3.0"
-duckduckgo-search = "^7.4.4"
+description = ""
+authors = [
+    {name = "dattatele",email = "datta.tele@gmail.com"}
+]
+packages = [{ include = "artgen" }]
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "click (>=8.1.8,<9.0.0)",
+    "pyfiglet (>=1.0.2)",
+    "requests (>=2.32.3)",
+    "ascii-magic (>=2.3.0)",
+    "duckduckgo-search (>=7.4.4)"
+]
 
 [tool.poetry.scripts]
-artgen = "artgen.__main__:main"
+artgen = "artgen.cli:cli"
 
 [build-system]
-requires = ["poetry-core>=1.0.0"]
+requires = ["poetry-core>=2.0.0,<3.0.0"]
 build-backend = "poetry.core.masonry.api"
