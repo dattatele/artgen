@@ -34,5 +34,5 @@ jobs:
 
       - name: Publish package to PyPI
         env:
-          PYPI_TOKEN: ${{ PYPI_TOKEN.PYPI_TOKEN }}
+          PYPI_TOKEN: ${{ secrets.PYPI_TOKEN }}
         run: poetry publish --username __token__ --password "$PYPI_TOKEN" --build
