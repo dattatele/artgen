@@ -1,16 +1,13 @@
-import argparse
+import click
 import os
+import pathlib
+import tempfile
+import traceback
 import requests
 import pyfiglet
-import ascii_magic
-# from ascii_magic import AsciiArt, Back
-import tempfile
 from duckduckgo_search import DDGS
 from io import BytesIO
 from PIL import Image
-
-import traceback
-import click
 
 
 def fetch_image_object(query):
@@ -58,24 +55,20 @@ def generate_art_cmd(description):
     image = fetch_image_object(description)
     if image:
         click.echo(f"Image fetched for '{description}'. Generating ASCII art...")
-        fd, temp_path = tempfile.mkstemp(suffix=".jpg")
         try:
-            with os.fdopen(fd, "wb") as tmp:
-                image.save(tmp, "JPEG")
-            art = ascii_magic.from_image(temp_path)
-        except Exception as e:
+            # Create a temporary directory and file using pathlib.
+            with tempfile.TemporaryDirectory() as temp_dir:
+                temp_file_path = pathlib.Path(temp_dir) / "temp.jpg"
+                with open(temp_file_path, "wb") as f:
+                    image.save(f, "JPEG")
+                # Lazy import ascii_magic only when needed.
+                import ascii_magic
+                art = ascii_magic.from_image(str(temp_file_path))
+                art.to_terminal()
+            click.echo("Rendering complete.")
+        except Exception:
             click.echo("Error generating ASCII art:")
             traceback.print_exc()
-            art = None
-        try:
-            os.remove(temp_path)
-        except Exception as e:
-            click.echo("Error removing temporary file:")
-            traceback.print_exc()
-        if art:
-            art.to_terminal()
-            click.echo("Rendering complete.")
-        else:
             click.echo(pyfiglet.figlet_format(description))
     else:
         click.echo("No image could be fetched. Falling back to pyfiglet stylized text.")
@@ -96,16 +89,16 @@ def generate_img_cmd(description):
     image = fetch_image_object(description)
     if image:
         click.echo(f"Image fetched for '{description}'. Saving locally...")
-        images_dir = "images"
-        os.makedirs(images_dir, exist_ok=True)
+        images_dir = pathlib.Path("images")
+        images_dir.mkdir(exist_ok=True)
         sanitized_query = "".join(c if c.isalnum() or c in " _-" else "_" for c in description)
-        image_path = os.path.join(images_dir, f"{sanitized_query}.jpg")
+        image_path = images_dir / f"{sanitized_query}.jpg"
         try:
-            image.save(image_path, "JPEG")
+            image.save(str(image_path), "JPEG")
             click.echo(f"Image saved as '{image_path}'")
-            img = Image.open(image_path)
-            img.show()
-        except Exception as e:
+            # Open the image with the default viewer.
+            Image.open(str(image_path)).show()
+        except Exception:
             click.echo("Error saving or displaying image:")
             traceback.print_exc()
     else:
