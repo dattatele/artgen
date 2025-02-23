@@ -1,6 +1,6 @@
 [project]
 name = "artgen"
-version = "0.1.2"
+version = "0.1.3"
 description = ""
 authors = [
     {name = "dattatele",email = "datta.tele@gmail.com"}
