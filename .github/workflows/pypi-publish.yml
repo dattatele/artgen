@@ -26,6 +26,16 @@ jobs:
       - name: Configure Poetry
         run: poetry config virtualenvs.create false
 
+      - name: Configure Poetry Token
+        env:
+          PYPI_TOKEN: ${{ secrets.PYPI_TOKEN }}
+        run: |
+          if [ -z "$PYPI_TOKEN" ]; then
+            echo "PYPI_TOKEN is empty!"
+            exit 1
+          fi
+          poetry config pypi-token.pypi "$PYPI_TOKEN"
+
       - name: Install dependencies
         run: poetry install
 
@@ -33,6 +43,23 @@ jobs:
         run: poetry build
 
       - name: Publish package to PyPI
-        env:
-          PYPI_TOKEN: ${{ secrets.PYPI_TOKEN }}
-        run: poetry publish --username __token__ --password "$PYPI_TOKEN" --build --no-interaction
+        run: poetry publish --no-interaction
+
+      # - name: Install dependencies
+      #   run: poetry install
+
+      # - name: Build package
+      #   run: poetry build
+
+      # - name: Configure Poetry Token
+      #   env:
+      #     PYPI_TOKEN: ${{ secrets.PYPI_TOKEN }}
+      #   run: poetry config pypi-token.pypi "$PYPI_TOKEN"
+
+      # - name: Publish package
+      #   run: poetry publish --build --no-interaction
+
+      # - name: Publish package to PyPI
+      #   env:
+      #     PYPI_TOKEN: ${{ secrets.PYPI_TOKEN }}
+      #   run: poetry publish --username __token__ --password "$PYPI_TOKEN" --build --no-interaction
