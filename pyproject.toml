@@ -1,6 +1,6 @@
 [project]
 name = "artgen"
-version = "0.1.10"
+version = "0.2.0"
 description = "A CLI tool that generates ASCII art based on a brief description."
 authors = [
     {name = "dattatele",email = "datta.tele@gmail.com"}
