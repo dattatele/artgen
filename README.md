@@ -16,7 +16,9 @@ Two New features
 
 ## Installation
 
-You can install ArtGen from [PyPI](https://pypi.org):
+**Make sure you have python 3.12 or higher** installed. You can download and install directly from python [official](https://www.python.org/)  
+
+You can install ArtGen from [PyPi](https://pypi.org/project/artgen/):
 
 ```bash
   pip install artgen --upgrade
