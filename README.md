@@ -1,4 +1,4 @@
-## ArtGen 🎨🚀 
+## ArtGen 🎨🚀 [![PyPI](https://img.shields.io/pypi/v/artgen.svg)](https://pypi.org/project/artgen/) 
 
 ![image](https://github.com/user-attachments/assets/b451d09f-c1e6-4f7f-8ab8-d8802571b2f4) 
 
@@ -18,7 +18,7 @@ Two New features
 
 **Make sure you have python 3.12 or higher** installed. You can download and install directly from python [official](https://www.python.org/)  
 
-You can install ArtGen from [PyPi](https://pypi.org/project/artgen/):
+You can install ArtGen from [PyPi](https://pypi.org/project/artgen/): 
 
 ```bash
   pip install artgen --upgrade
