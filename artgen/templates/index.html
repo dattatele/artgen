@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>ArtGen Web Interactive</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        .preview-container {
+            display: flex;
+            flex-wrap: wrap;
+            margin-top: 20px;
+        }
+        .image-preview, .ascii-preview {
+            flex: 1 1 45%;
+            margin: 10px;
+        }
+        .ascii-preview {
+            background: #f8f9fa;
+            padding: 10px;
+            overflow: auto;
+            max-height: 500px;
+            font-family: monospace;
+            white-space: pre;
+            border: 1px solid #ccc;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1 class="mt-4">ArtGen Web Interactive</h1>
+
+    {% with messages = get_flashed_messages() %}
+      {% if messages %}
+        <div class="alert alert-info">
+          {% for message in messages %}
+            <div>{{ message }}</div>
+          {% endfor %}
+        </div>
+      {% endif %}
+    {% endwith %}
+
+    <!-- Image Source and Upload/Search -->
+    <div class="card mb-3">
+      <div class="card-header">Image Input</div>
+      <div class="card-body">
+          <form method="POST" action="{{ url_for('index') }}" enctype="multipart/form-data">
+              <div class="form-group">
+                  <label for="search_query">Search Online:</label>
+                  <input type="text" class="form-control" name="search_query" placeholder="e.g. dog">
+              </div>
+              <button type="submit" name="action" value="search" class="btn btn-secondary">Search Online</button>
+              <hr>
+              <div class="form-group">
+                  <label for="local_image">Or Upload Local Image:</label>
+                  <input type="file" class="form-control-file" name="local_image" accept="image/*">
+              </div>
+              <button type="submit" name="action" value="upload" class="btn btn-primary">Upload Local</button>
+          </form>
+      </div>
+    </div>
+
+    <!-- Image Processing and ASCII Generation -->
+    <div class="card mb-3">
+      <div class="card-header">Image Processing & ASCII Generation</div>
+      <div class="card-body">
+          <form method="POST" action="{{ url_for('index') }}">
+              <div class="form-row">
+                  <div class="form-group col-md-4">
+                      <label for="brightness">Brightness:</label>
+                      <input type="range" class="form-control-range" name="brightness" min="0.5" max="1.5" step="0.1" value="1.0" oninput="this.nextElementSibling.value = this.value">
+                      <output>1.0</output>
+                  </div>
+                  <div class="form-group col-md-4">
+                      <label for="contrast">Contrast:</label>
+                      <input type="range" class="form-control-range" name="contrast" min="0.5" max="1.5" step="0.1" value="1.0" oninput="this.nextElementSibling.value = this.value">
+                      <output>1.0</output>
+                  </div>
+                  <div class="form-group col-md-4">
+                      <label for="gamma">Gamma:</label>
+                      <input type="range" class="form-control-range" name="gamma" min="0.5" max="1.5" step="0.1" value="1.0" oninput="this.nextElementSibling.value = this.value">
+                      <output>1.0</output>
+                  </div>
+              </div>
+
+              <div class="form-group">
+                  <label>Resolution:</label><br>
+                  <div class="form-check form-check-inline">
+                      <input class="form-check-input" type="radio" name="resolution" id="res_small" value="small" checked>
+                      <label class="form-check-label" for="res_small">Small</label>
+                  </div>
+                  <div class="form-check form-check-inline">
+                      <input class="form-check-input" type="radio" name="resolution" id="res_medium" value="medium">
+                      <label class="form-check-label" for="res_medium">Medium</label>
+                  </div>
+                  <div class="form-check form-check-inline">
+                      <input class="form-check-input" type="radio" name="resolution" id="res_large" value="large">
+                      <label class="form-check-label" for="res_large">Large</label>
+                  </div>
+              </div>
+
+              <div class="form-group form-check">
+                  <input type="checkbox" class="form-check-input" name="grayscale" id="grayscale">
+                  <label class="form-check-label" for="grayscale">Grayscale</label>
+              </div>
+
+              <div class="form-row">
+                <div class="form-group col-md-6">
+                    <label for="columns">Columns (width):</label>
+                    <input type="range" class="form-control-range" name="columns" min="50" max="300" step="10" value="200" oninput="this.nextElementSibling.value = this.value">
+                    <output>200</output>
+                </div>
+                <div class="form-group col-md-6">
+                    <label for="font_size">Font Size (px):</label>
+                    <input type="range" class="form-control-range" name="font_size" min="10" max="30" step="1" value="14" oninput="this.nextElementSibling.value = this.value">
+                    <output>14</output>
+                </div>
+              </div>
+
+              <div class="form-check mb-2">
+                <input type="checkbox" class="form-check-input" name="color_mode" id="color_mode">
+                <label class="form-check-label" for="color_mode">Color?</label>
+              </div>
+
+              <button type="submit" name="action" value="generate" class="btn btn-success">Generate ASCII</button>
+          </form>
+      </div>
+    </div>
+
+    <!-- Preview Section -->
+    {% if current_image %}
+    <div class="preview-container">
+        <div class="image-preview">
+            <h5>Image Preview</h5>
+            <img src="{{ url_for('static', filename='uploads/' + current_image) }}" class="img-fluid" alt="Image Preview">
+        </div>
+        <div class="ascii-preview">
+            <h5>ASCII Preview</h5>
+            {% if ascii_art %}
+                {{ ascii_art|safe }}
+            {% else %}
+                ASCII art will appear here...
+            {% endif %}
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- Export Section -->
+    {% if ascii_art %}
+    <div class="card mt-3">
+      <div class="card-header">Export ASCII Art</div>
+      <div class="card-body">
+        <form method="GET" action="{{ url_for('export_ascii') }}">
+              <div class="form-group">
+                  <label for="export_format">Select Export Format:</label>
+                  <select class="form-control" name="fmt" id="export_format">
+                      <option value="txt">TXT</option>
+                      <option value="html">HTML</option>
+                  </select>
+              </div>
+              <button type="submit" class="btn btn-info">Download ASCII Art</button>
+          </form>
+      </div>
+    </div>
+    {% endif %}
+
+</div>
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+</body>
+</html>

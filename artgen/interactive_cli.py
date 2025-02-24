@@ -181,7 +181,7 @@ class ArtGenTUI(App):
                     yield Input(placeholder="Local path or search query", id="input_path", classes="small-input")
 
             # # Row 2: Buttons row: Load Local, Search Online, Grayscale            
-            #     with Horizontal(classes="controls-row"):
+                with Horizontal(classes="controls-row"):
                     yield Button("Load Local", id="btn_local")
                     yield Button("Search Online", id="btn_search")
                     yield Checkbox("Grayscale?", id="chk_grayscale")
@@ -192,7 +192,7 @@ class ArtGenTUI(App):
                     yield Button("Generate", id="btn_generate")
 
             # 4) Export row
-                # with Horizontal(classes="controls-row"):
+                with Horizontal(classes="controls-row"):
                     yield Label("Export ASCII as:", classes="inline_lbl_btn")
                     yield Input(value="html", id="input_format", classes="xsmall-input")  # default is html
                     yield Button("Save ASCII", id="btn_save")

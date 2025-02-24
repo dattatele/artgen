@@ -6,7 +6,8 @@ import pyfiglet
 from PIL import Image
 
 from artgen.img import fetch_image_object
-from artgen.interactive import ArtGenTUI
+from artgen.interactive_cli import ArtGenTUI
+from artgen.interactive_web import app
 
 @click.group()
 def cli():
@@ -71,10 +72,20 @@ def generate_img_cmd(description):
         click.echo("No image available for the query.")
 
 
-@cli.command("interactive")
+@cli.command("interactive_cli")
 def interactive_cmd():
     """Launch the new Textual TUI for advanced usage."""
     ArtGenTUI().run()
+
+
+@cli.command("interactive")
+@click.option("--host", default="127.0.0.1", help="Host to run the web server on")
+@click.option("--port", default=5000, help="Port to run the web server on")
+def interactive_web_cmd(host, port):
+    """Launch the browser-based interactive mode."""
+    click.echo(f"Starting ArtGen Web Interactive at http://{host}:{port}")
+    app.run(host=host, port=port)
+
 
 if __name__ == "__main__":
     cli()
